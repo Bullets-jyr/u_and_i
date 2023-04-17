@@ -58,6 +58,23 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  assets:
+    - asset/img/
+
+  # weight를 지정하지 않을 경우 기본은 400 (개발자 임의대로 지정가능, 구분하는 목적)
+  fonts:
+    - family: parisienne
+      fonts:
+        - asset: asset/font/Parisienne-Regular.ttf
+
+    - family: sunflower
+      fonts:
+        - asset: asset/font/Sunflower-Light.ttf
+        - asset: asset/font/Sunflower-Medium.ttf
+          weight: 500
+        - asset: asset/font/Sunflower-Bold.ttf
+          weight: 700
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
