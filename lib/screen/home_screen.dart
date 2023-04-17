@@ -9,6 +9,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  DateTime selectedDate = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,12 +26,51 @@ class _HomeScreenState extends State<HomeScreen> {
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
-              _TopPart(),
+              // 자식 클래스(위젯)에서는 데이터를 올려줄 수 없습니다.
+              // _TopPart의 state를 _HomeScreenState로 올려준 이유입니다. 향후 하위 클래스(위젯)에서 사용할 수 도 있기 때문에...
+              _TopPart(
+                selectedDate: selectedDate,
+                onPressed: onHeartPressed,
+              ),
               _BottomPart(),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  void onHeartPressed() {
+    final DateTime now = DateTime.now();
+
+    showCupertinoDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        // 특정 위젯이 어디에 정렬을 해야하는지 알 수가 없으면, 그냥 최대한의 사이즈를 차지합니다.
+        return Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            color: Colors.white,
+            height: 300.0,
+            child: CupertinoDatePicker(
+              mode: CupertinoDatePickerMode.date,
+              initialDateTime: selectedDate,
+              maximumDate: DateTime(
+                now.year,
+                now.month,
+                now.day,
+              ),
+              onDateTimeChanged: (DateTime dateTime) {
+                print(dateTime);
+                setState(() {
+                  selectedDate = dateTime;
+                });
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -43,19 +88,15 @@ class _BottomPart extends StatelessWidget {
   }
 }
 
-class _TopPart extends StatefulWidget {
-  const _TopPart({Key? key}) : super(key: key);
+class _TopPart extends StatelessWidget {
+  final DateTime selectedDate;
+  final VoidCallback onPressed;
 
-  @override
-  State<_TopPart> createState() => _TopPartState();
-}
-
-class _TopPartState extends State<_TopPart> {
-  DateTime selectedDate = DateTime(
-    DateTime.now().year,
-    DateTime.now().month,
-    DateTime.now().day,
-  );
+  _TopPart({
+    Key? key,
+    required this.selectedDate,
+    required this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -96,37 +137,7 @@ class _TopPartState extends State<_TopPart> {
           ),
           IconButton(
             iconSize: 60.0,
-            onPressed: () {
-              showCupertinoDialog(
-                context: context,
-                barrierDismissible: true,
-                builder: (BuildContext context) {
-                  // 특정 위젯이 어디에 정렬을 해야하는지 알 수가 없으면, 그냥 최대한의 사이즈를 차지합니다.
-                  return Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      color: Colors.white,
-                      height: 300.0,
-                      child: CupertinoDatePicker(
-                        mode: CupertinoDatePickerMode.date,
-                        initialDateTime: selectedDate,
-                        maximumDate: DateTime(
-                          DateTime.now().year,
-                          DateTime.now().month,
-                          DateTime.now().day,
-                        ),
-                        onDateTimeChanged: (DateTime dateTime) {
-                          print(dateTime);
-                          setState(() {
-                            selectedDate = dateTime;
-                          });
-                        },
-                      ),
-                    ),
-                  );
-                },
-              );
-            },
+            onPressed: onPressed,
             icon: Icon(
               Icons.favorite,
               color: Colors.red,
