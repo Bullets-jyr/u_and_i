@@ -23,6 +23,8 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         bottom: false,
         child: Container(
+          // of: constructor
+          // of라는 constructor를 사용하는 클래스들의 특징은 inherited 위젯입니다.
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
@@ -100,6 +102,12 @@ class _TopPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // main.dart에서 지정한 theme 가져오기
+    // 위젯 트리에서 가장 가까운 theme 인스턴스를 가져옵니다.
+    // of: constructor
+    // of라는 constructor를 사용하는 클래스들의 특징은 inherited 위젯입니다.
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
     final now = DateTime.now();
 
     return Expanded(
@@ -108,30 +116,18 @@ class _TopPart extends StatelessWidget {
         children: [
           Text(
             'U&I',
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'parisienne',
-              fontSize: 80.0,
-            ),
+            style: textTheme.displayMedium,
           ),
           Column(
             children: [
               Text(
                 '우리 처음 만난날',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'sunflower',
-                  fontSize: 30.0,
-                ),
+                style: theme.textTheme.bodyMedium,
               ),
               Text(
                 // '2021. 12. 27',
                 '${selectedDate.year}. ${selectedDate.month}. ${selectedDate.day}',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'sunflower',
-                  fontSize: 20.0,
-                ),
+                style: textTheme.bodySmall,
               ),
             ],
           ),
@@ -150,12 +146,7 @@ class _TopPart extends StatelessWidget {
                   now.month,
                   now.day,
                 ).difference(selectedDate).inDays + 1}',
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'sunflower',
-              fontWeight: FontWeight.w700,
-              fontSize: 50.0,
-            ),
+            style: textTheme.displaySmall,
           ),
         ],
       ),
